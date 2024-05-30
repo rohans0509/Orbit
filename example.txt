@@ -1,0 +1,42 @@
+
+from Orbit import Flow, Agent, Route
+from dotenv import load_dotenv
+
+load_dotenv()
+
+# Create specific agents with names
+email_summariser = Agent("email_summariser", email_summariser_prompt,llm_model="gemini-1.5-pro-latest", input_keys=["email"],output_key="summary")
+email_responder = Agent("email_responder",  email_responder_prompt,llm_model="gemini-1.5-pro-latest",input_keys=["email"],output_key="response")
+email_classifier = Agent("email_classifier",  email_classifier_prompt,llm_model="gemini-1.5-pro-latest",input_keys=["email"],output_key="class")
+
+# Set route logic for email_classifier
+email_classifier_route_logic = {
+    "Personal": "email_summariser",
+    "Work": "email_responder",
+    "Promotional": "email_summariser",
+    "Social": "email_responder",
+}
+
+# Create the graph and add nodes
+flow = Flow("GraphName")
+flow.add_agents([email_summariser, email_responder, email_classifier])
+flow.add_routes([Route("email_classifier",["email_responder","email_summariser"], email_classifier_route_logic)])
+
+# Set the entry point of the flow
+flow.set_entry_point("email_classifier")
+
+# Compile flow
+flow.compile()
+
+# Save the flow configuration
+flow.save_flow("Saves/GraphName/flow.yaml")
+
+# Load the flow configuration from a file
+loaded_flow = Flow.load_flow("Saves/GraphName/flow.yaml")
+
+# Sample email
+sample_email = "Hi, the kids are doing well Jan! Best, John"
+initial_state = {"email": sample_email}
+
+# Run the graph
+final_state = flow.run(initial_state)
