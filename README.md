@@ -1,6 +1,3 @@
-Got it! Here's the revised README with only the necessary information from the user's perspective:
-
----
 
 # Orbit
 
@@ -94,7 +91,3 @@ flow.save_flow(filename)
 # Load the flow configuration
 loaded_flow = Flow.load_flow(filename)
 ```
-
-Replace placeholders (`name`, `instructions`, `llm_model`, `input_keys`, `output_key`, `from_agent`, `to_agents`, `route_logic`, `agent_name`, `initial_state`, `filename`) with your specific values.
-
-This example demonstrates basic usage of creating agents, defining routes, setting up a flow, running the flow, and saving/loading the flow configuration.
